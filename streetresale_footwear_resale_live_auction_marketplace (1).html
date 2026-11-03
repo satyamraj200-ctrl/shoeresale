@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STREETRESALE | Authenticated Sneaker & Footwear Resale Marketplace</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Space Grotesk for Streetwear Luxury Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#0a0a0a',
+                            gray: '#f5f5f5',
+                            emerald: '#10b981',
+                            mint: '#d1fae5',
+                            crimson: '#ef4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Marquee Ticker Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 28s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #111;
+            border-radius: 3px;
+        }
+
+        /* Hide scrollbar for pill bar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Product Card Image Hover Zoom */
+        .shoe-card:hover .shoe-img {
+            transform: scale(1.06) rotate(-2deg);
+        }
+        .shoe-img {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Subtle grid pattern like Culture Circle */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-white text-neutral-900 font-sans antialiased selection:bg-black selection:text-white">
+
+    <!-- 1. TOP ANNOUNCEMENT TICKER BAR (Culture Circle / Superkicks Style) -->
+    <div class="bg-black text-white text-[11px] font-bold tracking-widest uppercase py-2 overflow-hidden border-b border-neutral-800">
+        <div class="animate-marquee">
+            <span class="mx-6">⚡ NEW ARRIVALS</span><span>•</span>
+            <span class="mx-6">WELCOME TO STREETRESALE</span><span>•</span>
+            <span class="mx-6">100% AUTHENTICATED GRAILS</span><span>•</span>
+            <span class="mx-6 text-emerald-400">LIVE REAL-TIME AUCTIONS</span><span>•</span>
+            <span class="mx-6">DELIVERING TO ROHINI, DELHI 110085</span><span>•</span>
+            <span class="mx-6">BCA SYNOPSIS PROJECT DEMO (PYTHON FLASK + SQLITE)</span><span>•</span>
+            <span class="mx-6">⚡ NEW ARRIVALS</span><span>•</span>
+            <span class="mx-6">WELCOME TO STREETRESALE</span><span>•</span>
+            <span class="mx-6">100% AUTHENTICATED GRAILS</span><span>•</span>
+            <span class="mx-6 text-emerald-400">LIVE REAL-TIME AUCTIONS</span><span>•</span>
+            <span class="mx-6">DELIVERING TO ROHINI, DELHI 110085</span><span>•</span>
+            <span class="mx-6">BCA SYNOPSIS PROJECT DEMO (PYTHON FLASK + SQLITE)</span>
+        </div>
+    </div>
+
+    <!-- 2. MAIN DUAL-TIER HEADER -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200">
+        <!-- Tier 1: Logo, Search, Actions -->
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand Logo & Location -->
+            <div class="flex items-center gap-6">
+                <a href="#" onclick="switchView('marketplace'); return false;" class="group flex flex-col">
+                    <span class="font-display text-2xl sm:text-3xl font-extrabold tracking-tighter leading-none">
+                        STREET<span class="bg-black text-white px-1.5 py-0.5 ml-0.5 rounded">RESALE</span>
+                    </span>
+                    <span class="text-[11px] text-neutral-500 font-medium flex items-center gap-1 mt-1">
+                        <i class="fa-solid fa-location-dot text-black"></i> Delivering To <strong class="text-black underline">110085 (Delhi)</strong>
+                    </span>
+                </a>
+            </div>
+
+            <!-- Wide Pill Search Bar (Culture Circle Inspired) -->
+            <div class="hidden md:flex flex-1 max-w-xl relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"></i>
+                <input 
+                    id="searchInput"
+                    type="text" 
+                    oninput="handleSearch(this.value)"
+                    placeholder="Search For Yeezys, New Balance 204V, Thaely Tech Tabi, Jordan 1..." 
+                    class="w-full bg-neutral-100 hover:bg-neutral-200/70 focus:bg-white pl-11 pr-10 py-3 rounded-full text-sm font-medium text-neutral-900 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-black transition-all"
+                >
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Right Controls: Role Switcher, Sell CTA, Backend Code, Wishlist, Cart -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <!-- Live Polling Indicator Badge -->
+                <button onclick="toggleAutoPolling()" id="pollingBadge" title="Simulates AJAX Fetch Polling every 5 seconds" class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold hover:bg-emerald-100 transition">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>AJAX Polling: <span id="pollingStatusText">ON</span></span>
+                </button>
+
+                <!-- Seller "+ List Kicks" Button -->
+                <button onclick="openSellModal()" class="bg-black hover:bg-neutral-800 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-full flex items-center gap-2 transition shadow-sm">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Sell / List Kicks</span>
+                </button>
+
+                <!-- Python Flask Code Viewer Button (For Viva/Synopsis Demo) -->
+                <button onclick="openBackendModal()" class="hidden sm:flex items-center gap-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold px-3.5 py-2.5 rounded-full transition" title="View Python Flask + SQLite Backend Code">
+                    <i class="fa-brands fa-python text-sm"></i>
+                    <span class="hidden lg:inline">Flask + SQLite</span>
+                </button>
+
+                <!-- User / Dashboard Button -->
+                <button onclick="switchView('dashboard')" class="p-2.5 rounded-full border border-neutral-200 hover:border-black hover:bg-neutral-50 transition relative" title="My Orders, Bids & Seller Dashboard">
+                    <i class="fa-regular fa-user text-base"></i>
+                </button>
+
+                <!-- Wishlist Button -->
+                <button onclick="filterByWishlist()" class="p-2.5 rounded-full border border-neutral-200 hover:border-black hover:bg-neutral-50 transition relative" title="Saved Wishlist">
+                    <i class="fa-regular fa-heart text-base"></i>
+                    <span id="wishlistCountBadge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Cart Drawer Trigger -->
+                <button onclick="toggleCartDrawer(true)" class="p-2.5 rounded-full bg-neutral-100 hover:bg-black hover:text-white transition relative" title="Shopping Cart">
+                    <i class="fa-solid fa-bag-shopping text-base"></i>
+                    <span id="cartCountBadge" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[11px] font-bold flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                <input 
+                    type="text" 
+                    oninput="handleSearch(this.value)"
+                    placeholder="Search sneakers, brands, auctions..." 
+                    class="w-full bg-neutral-100 pl-9 pr-4 py-2 rounded-full text-xs font-medium focus:outline-none focus:ring-1 focus:ring-black"
+                >
+            </div>
+        </div>
+
+        <!-- Tier 2: Black Navigation Bar (Superkicks + Culture Circle Hybrid) -->
+        <nav class="bg-black text-white">
+            <div class="max-w-[1440px] mx-auto px-4 sm:px-8 flex items-center justify-between overflow-x-auto no-scrollbar h-11 text-xs font-bold tracking-wider uppercase">
+                <div class="flex items-center space-x-6 sm:space-x-9 whitespace-nowrap">
+                    <button onclick="setMainTab('all')" id="nav-all" class="nav-tab text-white border-b-2 border-white py-3 transition">ALL FOOTWEAR</button>
+                    <button onclick="setMainTab('auction')" id="nav-auction" class="nav-tab text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 py-3 transition">
+                        <i class="fa-solid fa-bolt"></i> LIVE AUCTIONS <span id="liveAuctionNavCount" class="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded text-[10px]">5</span>
+                    </button>
+                    <button onclick="setMainTab('fixed')" id="nav-fixed" class="nav-tab text-neutral-300 hover:text-white py-3 transition">⚡ FIXED PRICE (GET IT TODAY)</button>
+                    <button onclick="setMainTab('new')" id="nav-new" class="nav-tab text-neutral-300 hover:text-white py-3 transition">NEW ARRIVALS</button>
+                    <button onclick="setMainTab('under10k')" id="nav-under10k" class="nav-tab text-neutral-300 hover:text-white py-3 transition">UNDER ₹10,000</button>
+                    <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-tab text-amber-400 hover:text-amber-300 py-3 transition">MY BIDS & ORDERS</button>
+                </div>
+
+                <!-- Active User Switcher for Demo -->
+                <div class="hidden lg:flex items-center gap-2 text-[11px] font-medium text-neutral-300 whitespace-nowrap pl-4">
+                    <span>Logged in as:</span>
+                    <select id="activeUserSelect" onchange="switchActiveUser(this.value)" class="bg-neutral-900 text-white border border-neutral-700 rounded px-2 py-1 text-xs font-semibold focus:outline-none">
+                        <option value="Arjun Mehta (Buyer #101)">Arjun Mehta (Buyer)</option>
+                        <option value="Rohan Kapoor (Bidder #204)">Rohan Kapoor (Competing Bidder)</option>
+                        <option value="KicksVault Delhi (Verified Seller)">KicksVault Delhi (Seller)</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: MAIN MARKETPLACE VIEW              -->
+    <!-- ========================================== -->
+    <main id="marketplaceView">
+
+        <!-- 3. HERO CAROUSEL BANNER (Superkicks New Balance 204V + Culture Circle Hybrid) -->
+        <section class="relative bg-neutral-950 text-white overflow-hidden">
+            <!-- Slide 1: New Balance 204V Live Auction -->
+            <div id="heroSlide0" class="hero-slide relative min-h-[380px] sm:min-h-[460px] flex items-center">
+                <!-- Background Aesthetic Gradient & Mesh -->
+                <div class="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-900/95 to-neutral-800/40 z-10"></div>
+                <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1600&q=85" alt="New Balance 204V" class="absolute inset-0 w-full h-full object-cover object-center opacity-55">
+                
+                <div class="relative z-20 max-w-[1440px] mx-auto px-6 sm:px-12 py-12 w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                    <div class="max-w-xl space-y-4">
+                        <div class="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            Featured Live Auction Grail
+                        </div>
+                        <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight uppercase leading-none">
+                            NEW BALANCE <span class="text-neutral-400 block sm:inline">204V</span>
+                        </h1>
+                        <p class="text-neutral-300 text-sm sm:text-base max-w-md">
+                            Deadstock Condition • UK 9.5 • 100% Verified Authentic by StreetResale Labs. Compete in real-time bidding before the countdown expires.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-6 pt-2">
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider text-neutral-400 block">Current Highest Bid</span>
+                                <span class="text-2xl sm:text-3xl font-extrabold text-white" id="heroHighestBid">₹16,500</span>
+                            </div>
+                            <div class="h-8 w-[1px] bg-neutral-700"></div>
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider text-neutral-400 block">Auction Ends In</span>
+                                <span class="text-lg sm:text-xl font-mono font-bold text-emerald-400" id="heroTimerDisplay">01h : 42m : 19s</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 pt-2">
+                            <button onclick="openProductModal(2)" class="bg-white text-black hover:bg-emerald-400 hover:text-black font-extrabold text-xs sm:text-sm uppercase tracking-wider px-7 py-3.5 rounded-full transition shadow-lg">
+                                <i class="fa-solid fa-gavel mr-1.5"></i> Place Live Bid Now
+                            </button>
+                            <button onclick="setMainTab('auction')" class="bg-white/10 hover:bg-white/20 text-white border border-white/25 font-bold text-xs sm:text-sm uppercase tracking-wider px-6 py-3.5 rounded-full transition">
+                                Explore All Auctions
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Floating Live Bid Card Preview -->
+                    <div class="hidden lg:block bg-black/75 backdrop-blur-md border border-white/15 p-6 rounded-2xl w-80 shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+                            <span class="text-xs font-bold uppercase tracking-wider text-neutral-400">Live Bid Feed</span>
+                            <span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono">SQLite Synced</span>
+                        </div>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between items-center">
+                                <span class="text-neutral-300 font-medium">SneakerHead_99</span>
+                                <span class="font-bold text-emerald-400">₹16,500</span>
+                            </div>
+                            <div class="flex justify-between items-center text-neutral-500">
+                                <span>RohiniKicks_DL</span>
+                                <span>₹16,000</span>
+                            </div>
+                            <div class="flex justify-between items-center text-neutral-500">
+                                <span>Aarav_GGSIPU</span>
+                                <span>₹15,500</span>
+                            </div>
+                        </div>
+                        <button onclick="simulateIncomingBid(2)" class="mt-5 w-full py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition">
+                            <i class="fa-solid fa-bolt mr-1"></i> Simulate Competing Live Bid
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Culture Circle Inspired Pastel Drip Banner -->
+            <div id="heroSlide1" class="hero-slide hidden relative min-h-[380px] sm:min-h-[460px] flex items-center bg-gradient-to-r from-sky-200 via-purple-100 to-pink-200 text-black">
+                <div class="relative z-20 max-w-[1440px] mx-auto px-6 sm:px-12 py-12 w-full flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="max-w-xl space-y-4">
+                        <span class="inline-block bg-black text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                            CULTURED GRAILS CLUB
+                        </span>
+                        <h2 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight uppercase leading-none text-black">
+                            AUTHENTIC DRIP <br>AT FIXED OR BID PRICE
+                        </h2>
+                        <p class="text-neutral-700 text-sm sm:text-base font-medium">
+                            From Thaely Tech Tabi to Travis Scott Reverse Mocha — buy instantly with <strong class="text-black">⚡ NOW</strong> or bid on rare deadstock pairs.
+                        </p>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="setMainTab('fixed')" class="bg-black text-white hover:bg-neutral-800 font-bold text-xs sm:text-sm uppercase tracking-wider px-7 py-3.5 rounded-full transition">
+                                Shop Instant Buy
+                            </button>
+                            <button onclick="openSellModal()" class="bg-white text-black border border-black font-bold text-xs sm:text-sm uppercase tracking-wider px-6 py-3.5 rounded-full transition">
+                                List Your Pair
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=600&q=80" alt="Sneaker Showcase" class="w-72 h-72 object-cover rounded-3xl shadow-2xl rotate-3 border-4 border-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <button onclick="prevHeroSlide()" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button onclick="nextHeroSlide()" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+        </section>
+
+        <!-- 4. CULTURE CIRCLE STYLE QUICK-FILTER PILLS & SORT BAR -->
+        <section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-8 pb-4">
+            <!-- Breadcrumb & Title (Superkicks Style) -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
+                <div>
+                    <p class="text-xs text-neutral-400 font-medium mb-1">Home &gt; Footwear Marketplace &gt; <span id="currentCategoryBreadcrumb" class="text-black font-semibold">All Listings</span></p>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight uppercase">FOOTWEAR</h2>
+                </div>
+
+                <!-- Right Sort & Viva Demo Bar -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="triggerRandomLiveBid()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold px-3.5 py-2 rounded-full flex items-center gap-1.5 transition" title="Click during project viva to demonstrate real-time bid increment">
+                        <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i>
+                        <span>Simulate Incoming Bid (Demo)</span>
+                    </button>
+
+                    <div class="flex items-center gap-2 bg-neutral-100 px-3.5 py-2 rounded-full text-xs font-semibold">
+                        <i class="fa-solid fa-arrow-up-wide-short text-neutral-500"></i>
+                        <span>Sort By:</span>
+                        <select id="sortSelect" onchange="renderProducts()" class="bg-transparent font-bold text-black focus:outline-none cursor-pointer">
+                            <option value="featured">Featured Drops</option>
+                            <option value="ending_soon">Auction: Ending Soonest</option>
+                            <option value="price_low">Price: Low to High</option>
+                            <option value="price_high">Price: High to Low</option>
+                            <option value="most_bids">Most Active Bids</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horizontal Scrollable Quick Filter Pills (Culture Circle Exact Match) -->
+            <div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-2">
+                <button onclick="setBrandFilter('ALL')" id="pill-ALL" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-bold bg-black text-white border border-black transition">
+                    <i class="fa-solid fa-sliders mr-1.5"></i> All Grails
+                </button>
+                <button onclick="setMainTab('auction')" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    🔥 Live Bidding Now
+                </button>
+                <button onclick="setMainTab('fixed')" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    ⚡ Get It Tomorrow
+                </button>
+                <button onclick="setBrandFilter('Thaely')" id="pill-Thaely" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    Thaely Tech Tabi
+                </button>
+                <button onclick="setBrandFilter('New Balance')" id="pill-New Balance" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    New Balance 740 & 204V
+                </button>
+                <button onclick="setBrandFilter('Nike')" id="pill-Nike" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    Air Force 1
+                </button>
+                <button onclick="setBrandFilter('Adidas')" id="pill-Adidas" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    Adidas Samba & Adizero
+                </button>
+                <button onclick="setBrandFilter('Yeezy')" id="pill-Yeezy" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    Yeezy Slides
+                </button>
+                <button onclick="setBrandFilter('Jordan')" id="pill-Jordan" class="filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition">
+                    Air Jordan 1 Low
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. PRODUCT MARKETPLACE GRID (Superkicks + Culture Circle Card Architecture) -->
+        <section class="max-w-[1440px] mx-auto px-4 sm:px-8 py-6">
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10">
+                <!-- Dynamically populated by JavaScript -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-20 bg-neutral-50 rounded-3xl border border-dashed border-neutral-300 my-6">
+                <i class="fa-solid fa-shoe-prints text-4xl text-neutral-300 mb-3"></i>
+                <h3 class="text-lg font-bold text-neutral-800">No Matching Footwear Found</h3>
+                <p class="text-xs text-neutral-500 max-w-md mx-auto mt-1">Try clearing your search filter or list a new sneaker using the "+ Sell / List Kicks" button.</p>
+                <button onclick="resetAllFilters()" class="mt-4 bg-black text-white text-xs font-bold px-5 py-2.5 rounded-full">
+                    Reset All Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- 6. TOP 10 CULTURED / AUTHENTICATION BANNER SECTION -->
+        <section class="bg-grid-pattern border-t border-b border-neutral-200 py-14 mt-8">
+            <div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-600">HOW STREETRESALE WORKS</span>
+                    <h3 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">DUAL-ENGINE RESALE MARKETPLACE</h3>
+                    <p class="text-xs sm:text-sm text-neutral-600 mt-2">Designed per the BCA Project Synopsis: Combining instant fixed-price shopping with a real-time validated auction engine.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-neutral-200 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center font-bold mb-4">
+                            <i class="fa-solid fa-gavel"></i>
+                        </div>
+                        <h4 class="font-bold text-sm uppercase tracking-wider">1. Live Auction Bidding</h4>
+                        <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+                            Sellers set a starting price, minimum bid increment, and countdown timer. Server validates every bid before updating the highest bid.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-neutral-200 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold mb-4">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h4 class="font-bold text-sm uppercase tracking-wider">2. Fixed-Price Instant Buy</h4>
+                        <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+                            Look for the <span class="bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">⚡ NOW</span> badge to add sneakers directly to your cart and checkout immediately without waiting.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-neutral-200 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center font-bold mb-4">
+                            <i class="fa-solid fa-rotate"></i>
+                        </div>
+                        <h4 class="font-bold text-sm uppercase tracking-wider">3. AJAX Live Bid Polling</h4>
+                        <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+                            Uses periodic JavaScript Fetch/AJAX polling to synchronize current highest bids and countdown timers without full page reloads.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-neutral-200 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center font-bold mb-4">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h4 class="font-bold text-sm uppercase tracking-wider">4. Winner Auto-Selection</h4>
+                        <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+                            When an auction countdown reaches zero, bidding locks automatically and the highest bidder can complete their winning order checkout.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: USER & SELLER DASHBOARD VIEW       -->
+    <!-- ========================================== -->
+    <section id="dashboardView" class="hidden max-w-[1440px] mx-auto px-4 sm:px-8 py-10">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-200">
+            <div>
+                <button onclick="switchView('marketplace')" class="text-xs font-bold text-neutral-500 hover:text-black flex items-center gap-1.5 mb-2">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Footwear Marketplace
+                </button>
+                <h2 class="font-display text-3xl font-extrabold uppercase tracking-tight">MY ACCOUNT & RESALE DASHBOARD</h2>
+                <p class="text-xs text-neutral-500 mt-1">Active Session User: <strong id="dashboardUserName" class="text-black">Arjun Mehta (Buyer #101)</strong> • SQLite Session Active</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="openSellModal()" class="bg-black text-white text-xs font-bold px-5 py-2.5 rounded-full">
+                    <i class="fa-solid fa-plus mr-1"></i> Create New Listing
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 my-8">
+            <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
+                <span class="text-xs text-neutral-500 font-medium">My Placed Bids</span>
+                <p id="statTotalBids" class="text-2xl font-extrabold mt-1">0</p>
+            </div>
+            <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-200">
+                <span class="text-xs text-emerald-700 font-medium">Auctions Won / Leading</span>
+                <p id="statWonAuctions" class="text-2xl font-extrabold text-emerald-900 mt-1">0</p>
+            </div>
+            <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
+                <span class="text-xs text-neutral-500 font-medium">Completed Orders</span>
+                <p id="statTotalOrders" class="text-2xl font-extrabold mt-1">0</p>
+            </div>
+            <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
+                <span class="text-xs text-neutral-500 font-medium">My Seller Listings</span>
+                <p id="statMyListings" class="text-2xl font-extrabold mt-1">0</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Left Column: My Active Bids & Won Auctions -->
+            <div class="bg-white rounded-2xl border border-neutral-200 p-6">
+                <h3 class="font-display text-lg font-extrabold uppercase mb-4 flex items-center justify-between">
+                    <span><i class="fa-solid fa-gavel mr-2"></i>Live Bids & Won Auctions</span>
+                    <span class="text-xs font-normal text-neutral-400">Table: bids</span>
+                </h3>
+                <div id="dashboardBidsList" class="space-y-3">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Right Column: Order History -->
+            <div class="bg-white rounded-2xl border border-neutral-200 p-6">
+                <h3 class="font-display text-lg font-extrabold uppercase mb-4 flex items-center justify-between">
+                    <span><i class="fa-solid fa-box-open mr-2"></i>Buyer Order History</span>
+                    <span class="text-xs font-normal text-neutral-400">Table: orders</span>
+                </h3>
+                <div id="dashboardOrdersList" class="space-y-3">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Seller Listings Management Table -->
+        <div class="mt-8 bg-white rounded-2xl border border-neutral-200 p-6">
+            <h3 class="font-display text-lg font-extrabold uppercase mb-4 flex items-center justify-between">
+                <span><i class="fa-solid fa-store mr-2"></i>Seller Module — Manage Footwear Listings</span>
+                <span class="text-xs font-normal text-neutral-400">Table: listings</span>
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b border-neutral-200 text-neutral-400 uppercase">
+                            <th class="py-3 px-2">ID</th>
+                            <th class="py-3 px-2">Sneaker</th>
+                            <th class="py-3 px-2">Listing Type</th>
+                            <th class="py-3 px-2">Price / Highest Bid</th>
+                            <th class="py-3 px-2">Status</th>
+                            <th class="py-3 px-2 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sellerListingsTableBody" class="divide-y divide-neutral-100">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 1: PRODUCT DETAIL & LIVE AUCTION BIDDING ENGINE      -->
+    <!-- ========================================================= -->
+    <div id="productModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-neutral-200 my-8 animate-fadeIn">
+            <!-- Modal Header Bar -->
+            <div class="flex items-center justify-between px-6 py-4 bg-neutral-950 text-white">
+                <div class="flex items-center gap-2.5">
+                    <span id="modalListingBadge" class="px-2.5 py-1 rounded text-[11px] font-bold uppercase bg-emerald-500 text-black">LIVE AUCTION</span>
+                    <span id="modalProductId" class="text-xs text-neutral-400 font-mono">LISTING #102</span>
+                </div>
+                <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Left: Sneaker Image & Authenticity Info -->
+                <div class="bg-[#f5f5f5] p-8 flex flex-col justify-between relative">
+                    <div class="flex items-center justify-between">
+                        <span id="modalConditionBadge" class="bg-white border border-neutral-200 px-3 py-1 rounded-full text-xs font-bold text-neutral-800">
+                            UK 9 • Deadstock (10/10)
+                        </span>
+                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check"></i> Verified Authentic
+                        </span>
+                    </div>
+
+                    <div class="my-8 flex items-center justify-center">
+                        <img id="modalShoeImage" src="" alt="Sneaker" class="max-h-64 object-contain drop-shadow-xl">
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-neutral-200 text-xs space-y-1.5">
+                        <div class="flex justify-between">
+                            <span class="text-neutral-500">Seller Account:</span>
+                            <span id="modalSellerName" class="font-bold text-black">KicksVault Delhi</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-neutral-500">Dispatch Location:</span>
+                            <span class="font-semibold">Rohini Sector 14, Delhi - 110085</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-neutral-500">Authentication:</span>
+                            <span class="font-semibold text-emerald-700">Multi-Point Physical Inspection</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Pricing / Live Auction Bidding Engine -->
+                <div class="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div>
+                        <p id="modalBrand" class="text-xs font-bold uppercase tracking-widest text-neutral-400">NEW BALANCE</p>
+                        <h3 id="modalTitle" class="font-display text-2xl sm:text-3xl font-extrabold text-black mt-1">New Balance 740 Metallic Silver</h3>
+                        <p id="modalDescription" class="text-xs text-neutral-600 mt-2 leading-relaxed"></p>
+                    </div>
+
+                    <!-- DYNAMIC SECTION A: LIVE AUCTION INTERFACE -->
+                    <div id="modalAuctionSection" class="space-y-5">
+                        <!-- Live Metrics Box -->
+                        <div class="bg-neutral-950 text-white p-5 rounded-2xl">
+                            <div class="flex items-center justify-between border-b border-neutral-800 pb-3 mb-3">
+                                <div>
+                                    <span class="text-[11px] uppercase tracking-wider text-neutral-400 block">Current Highest Bid</span>
+                                    <span id="modalHighestBid" class="text-3xl font-extrabold text-emerald-400">₹13,999</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[11px] uppercase tracking-wider text-neutral-400 block">Time Remaining</span>
+                                    <span id="modalCountdown" class="font-mono text-lg font-bold text-amber-400">02h : 14m : 30s</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-neutral-300">
+                                <span>Starting Price: <strong id="modalStartPrice">₹11,500</strong></span>
+                                <span>Min Increment: <strong id="modalMinIncrement" class="text-emerald-400">+₹500</strong></span>
+                                <span>Total Bids: <strong id="modalBidCount">6</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Server-Side Validated Bid Input Form -->
+                        <div id="activeBiddingControls" class="space-y-3">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700">
+                                Submit Your Bid (Min Required: <span id="modalMinRequiredBid" class="text-black underline">₹14,499</span>)
+                            </label>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-neutral-500">₹</span>
+                                    <input 
+                                        id="bidAmountInput" 
+                                        type="number" 
+                                        class="w-full pl-8 pr-4 py-3 rounded-xl border-2 border-neutral-300 focus:border-black font-bold text-sm focus:outline-none"
+                                        placeholder="Enter bid in INR"
+                                    >
+                                </div>
+                                <button onclick="submitValidatedBid()" class="bg-black hover:bg-emerald-500 hover:text-black text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition">
+                                    Place Bid
+                                </button>
+                            </div>
+
+                            <!-- Quick Increment Buttons -->
+                            <div class="flex items-center gap-2">
+                                <button onclick="quickFillBid(1)" class="text-[11px] font-bold bg-neutral-100 hover:bg-neutral-200 px-3 py-1.5 rounded-lg transition">
+                                    + Min Increment
+                                </button>
+                                <button onclick="quickFillBid(2)" class="text-[11px] font-bold bg-neutral-100 hover:bg-neutral-200 px-3 py-1.5 rounded-lg transition">
+                                    + ₹1,000
+                                </button>
+                                <button onclick="quickFillBid(5)" class="text-[11px] font-bold bg-neutral-100 hover:bg-neutral-200 px-3 py-1.5 rounded-lg transition">
+                                    + ₹2,500
+                                </button>
+                            </div>
+
+                            <!-- Viva Evaluator Testing Controls -->
+                            <div class="pt-2 border-t border-dashed border-neutral-200 flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-[11px] font-bold text-neutral-400 uppercase">Viva Demo Tools:</span>
+                                <div class="flex gap-2">
+                                    <button onclick="simulateCompetingBidInModal()" class="text-[11px] font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-lg transition">
+                                        <i class="fa-solid fa-user-clock mr-1"></i> Simulate Rival Bid
+                                    </button>
+                                    <button onclick="fastForwardAuctionExpiry()" class="text-[11px] font-bold bg-red-50 hover:bg-red-100 text-red-800 border border-red-300 px-2.5 py-1 rounded-lg transition">
+                                        <i class="fa-solid fa-forward-fast mr-1"></i> End Auction Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Auction Closed / Winner Banner (Shown when timer hits 0) -->
+                        <div id="auctionClosedBanner" class="hidden bg-emerald-50 border-2 border-emerald-500 p-4 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-trophy text-amber-500"></i> Auction Completed & Locked
+                                </span>
+                                <span class="text-xs font-bold bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">CLOSED</span>
+                            </div>
+                            <p class="text-xs text-emerald-800">
+                                Winning Bidder: <strong id="modalWinnerName">Arjun Mehta</strong> with final bid of <strong id="modalWinningAmount">₹14,500</strong>.
+                            </p>
+                            <button onclick="checkoutWonAuction()" class="w-full bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition">
+                                Complete Winning Bid Checkout →
+                            </button>
+                        </div>
+
+                        <!-- Bid History Log -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2 flex items-center justify-between">
+                                <span>Server-Validated Bid History</span>
+                                <span class="font-mono text-[10px] text-emerald-600">● Live AJAX Feed</span>
+                            </h4>
+                            <div id="modalBidHistoryList" class="max-h-36 overflow-y-auto space-y-1.5 pr-1 border border-neutral-100 rounded-xl p-2.5 bg-neutral-50 text-xs">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DYNAMIC SECTION B: FIXED PRICE INTERFACE -->
+                    <div id="modalFixedSection" class="hidden space-y-5">
+                        <div class="bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
+                            <div class="flex items-baseline gap-3">
+                                <span id="modalFixedPrice" class="text-3xl font-extrabold text-black">₹5,664</span>
+                                <span id="modalEmiText" class="text-xs font-semibold text-emerald-700">or ₹629/month EMI</span>
+                            </div>
+                            <div class="mt-3 inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full text-xs font-bold">
+                                <i class="fa-solid fa-bolt"></i> NOW — In Stock & Ready to Ship Today
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button id="modalAddToCartBtn" class="flex-1 bg-black hover:bg-neutral-800 text-white font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl transition">
+                                <i class="fa-solid fa-bag-shopping mr-1.5"></i> Add To Cart
+                            </button>
+                            <button id="modalBuyNowBtn" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl transition">
+                                Instant Checkout →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 2: SELLER MODULE ("+ SELL / LIST FOOTWEAR")         -->
+    <!-- ========================================================= -->
+    <div id="sellModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl border border-neutral-200 my-8">
+            <div class="px-6 py-4 bg-black text-white flex items-center justify-between">
+                <div>
+                    <h3 class="font-display text-lg font-extrabold uppercase tracking-tight">Create Footwear Resale Listing</h3>
+                    <p class="text-[11px] text-neutral-400">Seller Module • Supports Fixed-Price or Live Auction</p>
+                </div>
+                <button onclick="closeSellModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleCreateListing(event)" class="p-6 space-y-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold uppercase text-neutral-600 block mb-1">Brand *</label>
+                        <select id="sellBrand" required class="w-full border border-neutral-300 rounded-xl px-3 py-2.5 font-semibold focus:outline-none focus:border-black">
+                            <option value="Nike">Nike</option>
+                            <option value="New Balance">New Balance</option>
+                            <option value="Adidas">Adidas</option>
+                            <option value="Thaely">Thaely</option>
+                            <option value="Jordan">Air Jordan</option>
+                            <option value="Yeezy">Yeezy</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold uppercase text-neutral-600 block mb-1">Sneaker Model Title *</label>
+                        <input id="sellTitle" type="text" required placeholder="e.g., Dunk Low Panda Retro" class="w-full border border-neutral-300 rounded-xl px-3 py-2.5 font-semibold focus:outline-none focus:border-black">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold uppercase text-neutral-600 block mb-1">UK Shoe Size *</label>
+                        <select id="sellSize" class="w-full border border-neutral-300 rounded-xl px-3 py-2.5 font-semibold focus:outline-none focus:border-black">
+                            <option value="UK 7">UK 7</option>
+                            <option value="UK 8">UK 8</option>
+                            <option value="UK 9" selected>UK 9</option>
+                            <option value="UK 10">UK 10</option>
+                            <option value="UK 11">UK 11</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold uppercase text-neutral-600 block mb-1">Condition *</label>
+                        <select id="sellCondition" class="w-full border border-neutral-300 rounded-xl px-3 py-2.5 font-semibold focus:outline-none focus:border-black">
+                            <option value="Deadstock (10/10)">Deadstock (10/10)</option>
+                            <option value="VNDS (9.5/10)">VNDS (9.5/10)</option>
+                            <option value="Pre-Owned (8.5/10)">Pre-Owned (8.5/10)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Listing Type Toggle: Fixed Price vs Live Auction -->
+                <div>
+                    <label class="font-bold uppercase text-neutral-600 block mb-1.5">Select Selling Mechanism *</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" id="typeBtnAuction" onclick="toggleSellType('auction')" class="py-3 px-4 rounded-xl border-2 border-black bg-black text-white font-bold flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-gavel"></i> Live Auction Bidding
+                        </button>
+                        <button type="button" id="typeBtnFixed" onclick="toggleSellType('fixed')" class="py-3 px-4 rounded-xl border-2 border-neutral-200 bg-white text-neutral-700 font-bold flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-tag"></i> Fixed Instant Price
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Price & Auction Fields -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
+                    <div>
+                        <label id="sellPriceLabel" class="font-bold uppercase text-neutral-600 block mb-1">Starting Bid (₹) *</label>
+                        <input id="sellPrice" type="number" required min="500" value="8500" class="w-full border border-neutral-300 rounded-xl px-3 py-2 font-bold">
+                    </div>
+                    <div id="sellIncrementWrap">
+                        <label class="font-bold uppercase text-neutral-600 block mb-1">Min Increment (₹)</label>
+                        <input id="sellIncrement" type="number" min="100" value="500" class="w-full border border-neutral-300 rounded-xl px-3 py-2 font-bold">
+                    </div>
+                    <div id="sellDurationWrap">
+                        <label class="font-bold uppercase text-neutral-600 block mb-1">Auction Duration</label>
+                        <select id="sellDuration" class="w-full border border-neutral-300 rounded-xl px-3 py-2 font-bold bg-white">
+                            <option value="3600">1 Hour</option>
+                            <option value="7200" selected>2 Hours</option>
+                            <option value="180">3 Mins (Viva Demo)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Preset Sneaker Image Selector -->
+                <div>
+                    <label class="font-bold uppercase text-neutral-600 block mb-1">Select Sneaker Image Preset (or paste URL)</label>
+                    <select id="sellImagePreset" class="w-full border border-neutral-300 rounded-xl px-3 py-2.5 font-semibold bg-white">
+                        <option value="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80">Nike Red/Black Grails</option>
+                        <option value="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=700&q=80">New Balance Grey Runner</option>
+                        <option value="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=700&q=80">Air Jordan Retro High</option>
+                        <option value="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=700&q=80">Minimalist White Low Sneaker</option>
+                    </select>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-3">
+                    <button type="button" onclick="closeSellModal()" class="px-5 py-2.5 rounded-full border border-neutral-300 font-bold">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-full bg-black text-white font-bold hover:bg-emerald-500 hover:text-black transition">
+                        Publish Listing to Marketplace
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SLIDE-OUT CART & SIMULATED CHECKOUT DRAWER                -->
+    <!-- ========================================================= -->
+    <div id="cartDrawerBackdrop" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col justify-between">
+            <!-- Drawer Header -->
+            <div class="p-6 bg-black text-white flex items-center justify-between">
+                <div>
+                    <h3 class="font-display text-lg font-extrabold uppercase">Your Bag & Checkout</h3>
+                    <p class="text-[11px] text-neutral-400">Fixed-Price Items & Won Auction Grails</p>
+                </div>
+                <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Populated via JS -->
+            </div>
+
+            <!-- Checkout Form & Total Footer -->
+            <div class="p-6 bg-neutral-50 border-t border-neutral-200 space-y-4">
+                <div class="space-y-2 text-xs">
+                    <label class="font-bold uppercase text-neutral-600 block">Delivery Address (Delhi NCR)</label>
+                    <input id="checkoutAddress" type="text" value="Sector 14, Madhuban Chowk, Rohini, Delhi - 110085" class="w-full border border-neutral-300 rounded-xl px-3 py-2 font-medium bg-white">
+                    <label class="font-bold uppercase text-neutral-600 block pt-1">Simulated Payment Method (Academic Demo)</label>
+                    <select id="checkoutPaymentMethod" class="w-full border border-neutral-300 rounded-xl px-3 py-2 font-semibold bg-white">
+                        <option value="UPI (GPay / PhonePe Verified)">UPI Instant (GPay / PhonePe Simulated)</option>
+                        <option value="Debit / Credit Card (Simulated)">Debit / Credit Card (Simulated Gateway)</option>
+                        <option value="Split EMI (₹0 Down)">3-Month No-Cost Sneaker EMI</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t border-neutral-200">
+                    <span class="text-xs font-bold uppercase text-neutral-500">Total Payable</span>
+                    <span id="cartTotalPrice" class="text-2xl font-extrabold text-black">₹0</span>
+                </div>
+
+                <button onclick="processSimulatedCheckout()" class="w-full bg-black hover:bg-emerald-500 hover:text-black text-white font-extrabold text-xs uppercase tracking-wider py-4 rounded-full transition shadow-lg">
+                    Complete Simulated Order Checkout →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 3: PYTHON FLASK + SQLITE ARCHITECTURE VIEWER        -->
+    <!-- ========================================================= -->
+    <div id="backendModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-neutral-900 text-neutral-100 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-neutral-700 my-8">
+            <div class="px-6 py-4 bg-black flex items-center justify-between border-b border-neutral-800">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-brands fa-python text-amber-400 text-xl"></i>
+                    <div>
+                        <h3 class="font-display text-base font-extrabold uppercase text-white">BCA Synopsis Architecture: Python Flask + SQLite Database Schema</h3>
+                        <p class="text-[11px] text-neutral-400">Matches your 4 primary database entities (users, listings, bids, orders) & server-side bid validation</p>
+                    </div>
+                </div>
+                <button onclick="closeBackendModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs font-mono">
+                <div class="bg-neutral-950 p-4 rounded-xl border border-neutral-800">
+                    <p class="text-emerald-400 font-bold mb-2">// 1. SQLite Database Entities (users, listings, bids, orders)</p>
+                    <pre class="text-neutral-300 overflow-x-auto leading-relaxed">CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT DEFAULT 'buyer_seller'
+);
+
+CREATE TABLE listings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    seller_id INTEGER NOT NULL,
+    brand TEXT NOT NULL,
+    title TEXT NOT NULL,
+    size TEXT NOT NULL,
+    condition TEXT NOT NULL,
+    listing_type TEXT CHECK(listing_type IN ('fixed', 'auction')) NOT NULL,
+    price INTEGER NOT NULL,
+    current_bid INTEGER DEFAULT 0,
+    min_increment INTEGER DEFAULT 500,
+    end_time DATETIME,
+    status TEXT DEFAULT 'active'
+);
+
+CREATE TABLE bids (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    bidder_id INTEGER NOT NULL,
+    bid_amount INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    buyer_id INTEGER NOT NULL,
+    final_amount INTEGER NOT NULL,
+    payment_method TEXT NOT NULL,
+    order_status TEXT DEFAULT 'Confirmed'
+);</pre>
+                </div>
+                <p class="text-neutral-400 font-sans">
+                    💡 <strong>Tip for your BCA Project Presentation:</strong> The complete runnable Python Flask backend (`app.py`) has also been generated alongside this frontend so you can demonstrate both the live UI and the Python backend code to your external examiner.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <!-- FOOTER (Superkicks + Tecnia Institute Academic Credit) -->
+    <footer class="bg-black text-white pt-14 pb-10 border-t border-neutral-800 mt-16">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-neutral-800 text-xs">
+            <div class="space-y-3">
+                <span class="font-display text-2xl font-extrabold tracking-tighter">
+                    STREET<span class="bg-white text-black px-1.5 py-0.5 ml-0.5 rounded">RESALE</span>
+                </span>
+                <p class="text-neutral-400 leading-relaxed">
+                    India's premier sneaker & footwear resale marketplace featuring real-time validated live auctions and instant fixed-price grails.
+                </p>
+                <p class="text-emerald-400 font-semibold">Tecnia Institute of Advanced Studies (GGSIPU, Delhi)</p>
+            </div>
+            <div>
+                <h4 class="font-bold uppercase tracking-wider mb-3 text-neutral-300">Marketplace Modules</h4>
+                <ul class="space-y-2 text-neutral-400">
+                    <li><a href="#" onclick="setMainTab('auction'); return false;" class="hover:text-white">Live Sneaker Auctions</a></li>
+                    <li><a href="#" onclick="setMainTab('fixed'); return false;" class="hover:text-white">Fixed-Price Instant Buy</a></li>
+                    <li><a href="#" onclick="openSellModal(); return false;" class="hover:text-white">Seller Listing Portal</a></li>
+                    <li><a href="#" onclick="switchView('dashboard'); return false;" class="hover:text-white">Order & Bid History</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold uppercase tracking-wider mb-3 text-neutral-300">Trending Footwear</h4>
+                <ul class="space-y-2 text-neutral-400">
+                    <li>Thaely Tech Tabi (Recycled)</li>
+                    <li>New Balance 740 & 204V</li>
+                    <li>Nike Air Force 1 '07 Triple White</li>
+                    <li>Adidas Samba OG & Adizero Evo SL</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold uppercase tracking-wider mb-3 text-neutral-300">Synopsis Tech Stack</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-neutral-900 border border-neutral-700 px-2.5 py-1 rounded text-[11px]">Python Flask</span>
+                    <span class="bg-neutral-900 border border-neutral-700 px-2.5 py-1 rounded text-[11px]">SQLite3 DB</span>
+                    <span class="bg-neutral-900 border border-neutral-700 px-2.5 py-1 rounded text-[11px]">HTML5 / CSS3</span>
+                    <span class="bg-neutral-900 border border-neutral-700 px-2.5 py-1 rounded text-[11px]">JS Fetch / AJAX Polling</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500">
+            <p>© 2026 FootwearResale (StreetResale) — BCA Major Project Submission.</p>
+            <p>Institutional Area, Madhuban Chowk, Rohini, Delhi - 110085</p>
+        </div>
+    </footer>
+
+    <!-- ========================================================= -->
+    <!-- APPLICATION JAVASCRIPT ENGINE (MARKETPLACE + LIVE BIDDING)-->
+    <!-- ========================================================= -->
+    <script>
+        // --- 1. INITIAL SNEAKER DATASET (MATCHING USER SCREENSHOTS FROM SUPERKICKS & CULTURE CIRCLE) ---
+        const initialListings = [
+            {
+                id: 1,
+                brand: "NEW BALANCE",
+                title: "740 'Metallic Silver'",
+                category: "UNISEX",
+                size: "UK 9",
+                condition: "Deadstock (10/10)",
+                listingType: "auction",
+                price: 11500,
+                currentBid: 13999,
+                minIncrement: 500,
+                secondsLeft: 8075, // ~2h 14m
+                status: "active",
+                seller: "SuperKicks_Vault",
+                rating: "4.9",
+                reviewsCount: "42+",
+                image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=800&q=85",
+                description: "Iconic Y2K runner silhouette in breathable mesh and metallic silver synthetic overlays with ABZORB cushioning.",
+                bids: [
+                    { bidder: "Rohan Kapoor (Bidder #204)", amount: 13999, time: "2 mins ago" },
+                    { bidder: "SneakerHead_DL", amount: 13400, time: "9 mins ago" },
+                    { bidder: "Vikram_99", amount: 12500, time: "24 mins ago" }
+                ]
+            },
+            {
+                id: 2,
+                brand: "NEW BALANCE",
+                title: "204V 'Grey Suede'",
+                category: "UNISEX",
+                size: "UK 9.5",
+                condition: "Deadstock (10/10)",
+                listingType: "auction",
+                price: 14000,
+                currentBid: 16500,
+                minIncrement: 500,
+                secondsLeft: 6139, // ~1h 42m
+                status: "active",
+                seller: "KicksVault Delhi",
+                rating: "5.0",
+                reviewsCount: "64+",
+                image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=85",
+                description: "As featured on the hero drop: Premium slate grey suede construction with cross-strap detailing and sculpted sole unit.",
+                bids: [
+                    { bidder: "SneakerHead_99", amount: 16500, time: "Just now" },
+                    { bidder: "RohiniKicks_DL", amount: 16000, time: "14 mins ago" },
+                    { bidder: "Aarav_GGSIPU", amount: 15500, time: "31 mins ago" }
+                ]
+            },
+            {
+                id: 3,
+                brand: "THAELY",
+                title: "TECH TABI 'Cyber Yellow'",
+                category: "UNISEX",
+                size: "UK 8",
+                condition: "Deadstock (10/10)",
+                listingType: "fixed",
+                price: 3500,
+                currentBid: 3500,
+                minIncrement: 0,
+                secondsLeft: 0,
+                status: "active",
+                seller: "Thaely_Studio",
+                rating: "4.8",
+                reviewsCount: "120+",
+                image: "https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=800&q=85",
+                description: "Crafted sustainably from recycled plastic bags and industrial rubber waste with signature split-toe Tech Tabi profile.",
+                bids: []
+            },
+            {
+                id: 4,
+                brand: "THAELY",
+                title: "TECH TABI 'Crimson Red'",
+                category: "UNISEX",
+                size: "UK 9",
+                condition: "Deadstock (10/10)",
+                listingType: "fixed",
+                price: 3500,
+                currentBid: 3500,
+                minIncrement: 0,
+                secondsLeft: 0,
+                status: "active",
+                seller: "Thaely_Studio",
+                rating: "4.8",
+                reviewsCount: "95+",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=85",
+                description: "Bold crimson recycled mesh upper paired with a high-traction black lugged sole unit.",
+                bids: []
+            },
+            {
+                id: 5,
+                brand: "THAELY",
+                title: "TECH TABI 'Cobalt Blue'",
+                category: "UNISEX",
+                size: "UK 10",
+                condition: "Deadstock (10/10)",
+                listingType: "fixed",
+                price: 3500,
+                currentBid: 3500,
+                minIncrement: 0,
+                secondsLeft: 0,
+                status: "active",
+                seller: "Thaely_Studio",
+                rating: "4.9",
+                reviewsCount: "88+",
+                image: "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?auto=format&fit=crop&w=800&q=85",
+                description: "Electric cobalt blue colorway with contrasting white piping and rugged outsole.",
+                bids: []
+            },
+            {
+                id: 6,
+                brand: "NIKE",
+                title: "Air Force 1 Low '07 'Triple White'",
+                category: "MEN / UNISEX",
+                size: "UK 9",
+                condition: "Deadstock (10/10)",
+                listingType: "fixed",
+                price: 5664,
+                currentBid: 5664,
+                minIncrement: 0,
+                secondsLeft: 0,
+                status: "active",
+                seller: "CultureGrails_IN",
+                rating: "4.9",
+                reviewsCount: "50+",
+                image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=85",
+                description: "The undisputed streetwear staple. Crisp white leather overlays, perforated toe box, and encapsulated Nike Air cushioning.",
+                bids: []
+            },
+            {
+                id: 7,
+                brand: "ADIDAS",
+                title: "Adidas Samba OG 'Cloud White'",
+                category: "UNISEX",
+                size: "UK 8.5",
+                condition: "Deadstock (10/10)",
+                listingType: "fixed",
+                price: 6785,
+                currentBid: 6785,
+                minIncrement: 0,
+                secondsLeft: 0,
+                status: "active",
+                seller: "CultureGrails_IN",
+                rating: "4.7",
+                reviewsCount: "83.1k+",
+                image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=85",
+                description: "Classic full-grain leather upper with suede T-toe overlay, serrated 3-Stripes, and gum rubber outsole.",
+                bids: []
+            },
+            {
+                id: 8,
+                brand: "ADIDAS",
+                title: "Adizero Evo SL 'Black White'",
+                category: "ATHLETICS",
+                size: "UK 9",
+                condition: "Deadstock (10/10)",
+                listingType: "auction",
+                price: 9000,
+                currentBid: 10540,
+                minIncrement: 300,
+                secondsLeft: 4320,
+                status: "active",
+                seller: "KicksVault Delhi",
+                rating: "4.8",
+                reviewsCount: "17.2k+",
+                image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=85",
+                description: "Ultra-lightweight Lightstrike Pro foam runner inspired by record-breaking marathon footwear.",
+                bids: [
+                    { bidder: "Arjun Mehta (Buyer #101)", amount: 10540, time: "5 mins ago" },
+                    { bidder: "Karan_Runner", amount: 10100, time: "19 mins ago" }
+                ]
+            },
+            {
+                id: 9,
+                brand: "YEEZY",
+                title: "Adidas Yeezy Slides 'Onyx'",
+                category: "UNISEX",
+                size: "UK 9",
+                condition: "Deadstock (10/10)",
+                listingType: "auction",
+                price: 6500,
+                currentBid: 7699,
+                minIncrement: 250,
+                secondsLeft: 2950,
+                status: "active",
+                seller: "HypeVault_Rohini",
+                rating: "4.6",
+                reviewsCount: "2.8k+",
+                image: "https://images.unsplash.com/photo-1603487742131-4160ec999306?auto=format&fit=crop&w=800&q=85",
+                description: "Injected EVA foam construction in stealth matte Onyx black with deep serrated traction grooves.",
+                bids: [
+                    { bidder: "Rohan Kapoor (Bidder #204)", amount: 7699, time: "7 mins ago" }
+                ]
+            },
+            {
+                id: 10,
+                brand: "JORDAN",
+                title: "Air Jordan 1 Low 'Reverse Mocha'",
+                category: "GRAIL AUCTION",
+                size: "UK 9",
+                condition: "Deadstock (10/10)",
+                listingType: "auction",
+                price: 42000,
+                currentBid: 48500,
+                minIncrement: 1000,
+                secondsLeft: 5120,
+                status: "active",
+                seller: "KicksVault Delhi",
+                rating: "5.0",
+                reviewsCount: "310+",
+                image: "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=800&q=85",
+                description: "Signature reverse sail Swoosh, Mocha nubuck base, and Cactus Jack heel embroidery.",
+                bids: [
+                    { bidder: "SneakerKing_IN", amount: 48500, time: "4 mins ago" },
+                    { bidder: "Arjun Mehta (Buyer #101)", amount: 47000, time: "18 mins ago" }
+                ]
+            }
+        ];
+
+        // --- 2. APPLICATION STATE ---
+        let listings = JSON.parse(localStorage.getItem('sr_listings_v1')) || initialListings;
+        let cart = JSON.parse(localStorage.getItem('sr_cart_v1')) || [];
+        let orders = JSON.parse(localStorage.getItem('sr_orders_v1')) || [
+            {
+                orderId: "ORD-89412",
+                title: "Adidas Samba OG 'Cloud White'",
+                type: "FIXED PRICE",
+                amount: 6785,
+                buyer: "Arjun Mehta (Buyer #101)",
+                paymentMethod: "UPI Instant (Simulated)",
+                date: "02 Nov 2026",
+                status: "Authenticated & Shipped"
+            }
+        ];
+        let wishlist = JSON.parse(localStorage.getItem('sr_wishlist_v1')) || [1, 2];
+
+        let currentMainTab = 'all'; // 'all', 'auction', 'fixed', 'new', 'under10k', 'wishlist'
+        let currentBrandFilter = 'ALL';
+        let currentSearchQuery = '';
+        let activeUser = "Arjun Mehta (Buyer #101)";
+        let selectedProductId = null;
+        let sellModalListingType = 'auction';
+        let autoPollingEnabled = true;
+        let currentHeroSlide = 0;
+
+        function saveState() {
+            localStorage.setItem('sr_listings_v1', JSON.stringify(listings));
+            localStorage.setItem('sr_cart_v1', JSON.stringify(cart));
+            localStorage.setItem('sr_orders_v1', JSON.stringify(orders));
+            localStorage.setItem('sr_wishlist_v1', JSON.stringify(wishlist));
+        }
+
+        // Format currency in Indian Rupees
+        function formatINR(num) {
+            return '₹' + Number(num).toLocaleString('en-IN');
+        }
+
+        // Format seconds into HHh : MMm : SSs
+        function formatSeconds(sec) {
+            if (sec <= 0) return "00h : 00m : 00s";
+            const h = Math.floor(sec / 3600);
+            const m = Math.floor((sec % 3600) / 60);
+            const s = sec % 60;
+            return `${String(h).padStart(2, '0')}h : ${String(m).padStart(2, '0')}m : ${String(s).padStart(2, '0')}`;
+        }
+
+        // --- 3. RENDER MARKETPLACE GRID ---
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            const sortVal = document.getElementById('sortSelect').value;
+
+            // Update Live Auction Nav Counter
+            const activeAuctionCount = listings.filter(item => item.listingType === 'auction' && item.secondsLeft > 0).length;
+            document.getElementById('liveAuctionNavCount').textContent = activeAuctionCount;
+
+            // Filter listings
+            let filtered = listings.filter(item => {
+                // Main tab filter
+                if (currentMainTab === 'auction' && item.listingType !== 'auction') return false;
+                if (currentMainTab === 'fixed' && item.listingType !== 'fixed') return false;
+                if (currentMainTab === 'under10k' && item.currentBid >= 10000) return false;
+                if (currentMainTab === 'wishlist' && !wishlist.includes(item.id)) return false;
+
+                // Brand filter
+                if (currentBrandFilter !== 'ALL' && item.brand.toUpperCase() !== currentBrandFilter.toUpperCase()) return false;
+
+                // Search query filter
+                if (currentSearchQuery.trim() !== '') {
+                    const q = currentSearchQuery.toLowerCase();
+                    const matchTitle = item.title.toLowerCase().includes(q);
+                    const matchBrand = item.brand.toLowerCase().includes(q);
+                    if (!matchTitle && !matchBrand) return false;
+                }
+                return true;
+            });
+
+            // Sort listings
+            if (sortVal === 'price_low') {
+                filtered.sort((a, b) => a.currentBid - b.currentBid);
+            } else if (sortVal === 'price_high') {
+                filtered.sort((a, b) => b.currentBid - a.currentBid);
+            } else if (sortVal === 'ending_soon') {
+                filtered.sort((a, b) => {
+                    if (a.listingType === 'auction' && b.listingType !== 'auction') return -1;
+                    if (a.listingType !== 'auction' && b.listingType === 'auction') return 1;
+                    return a.secondsLeft - b.secondsLeft;
+                });
+            } else if (sortVal === 'most_bids') {
+                filtered.sort((a, b) => (b.bids?.length || 0) - (a.bids?.length || 0));
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(item => {
+                const isWishlisted = wishlist.includes(item.id);
+                const isAuction = item.listingType === 'auction';
+                const isExpired = isAuction && item.secondsLeft <= 0;
+                const monthlyEmi = Math.round(item.currentBid / 9);
+
+                return `
+                <article class="shoe-card group flex flex-col justify-between bg-white">
+                    <div>
+                        <!-- Light Gray Image Box (Superkicks + Culture Circle Exact Look) -->
+                        <div onclick="openProductModal(${item.id})" class="relative bg-[#f5f5f5] aspect-square rounded-2xl overflow-hidden cursor-pointer flex items-center justify-center p-6 border border-neutral-100">
+                            
+                            <!-- Top-Left Status Badge -->
+                            <div class="absolute top-3.5 left-3.5 z-10 flex flex-col gap-1.5">
+                                ${isAuction ? `
+                                    <span class="${isExpired ? 'bg-neutral-800 text-white' : 'bg-black text-emerald-400'} text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                                        <span class="w-1.5 h-1.5 rounded-full ${isExpired ? 'bg-red-500' : 'bg-emerald-400 animate-ping'}"></span>
+                                        ${isExpired ? 'AUCTION ENDED' : 'LIVE AUCTION'}
+                                    </span>
+                                ` : `
+                                    <span class="bg-white/90 backdrop-blur text-black border border-neutral-200 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                                        ${item.size}
+                                    </span>
+                                `}
+                            </div>
+
+                            <!-- Top-Right Wishlist Heart Button -->
+                            <button onclick="event.stopPropagation(); toggleWishlist(${item.id})" class="absolute top-3.5 right-3.5 z-10 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-neutral-600 hover:text-red-500 transition shadow-sm">
+                                <i class="${isWishlisted ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart text-sm"></i>
+                            </button>
+
+                            <!-- Product Image -->
+                            <img src="${item.image}" alt="${item.title}" class="shoe-img w-full h-48 object-contain mix-blend-multiply">
+
+                            <!-- Bottom-Left Rating / Timer Pill -->
+                            <div class="absolute bottom-3.5 left-3.5 z-10">
+                                ${isAuction ? `
+                                    <span data-timer-id="${item.id}" class="bg-white/95 border border-neutral-200 text-black font-mono text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm">
+                                        ⏳ ${isExpired ? 'CLOSED' : formatSeconds(item.secondsLeft)}
+                                    </span>
+                                ` : `
+                                    <span class="bg-white/95 border border-neutral-200 text-[11px] font-bold px-2 py-0.5 rounded text-emerald-700">
+                                        ★ ${item.rating} <span class="text-neutral-400 font-normal">| ${item.reviewsCount}</span>
+                                    </span>
+                                `}
+                            </div>
+
+                            <!-- Bottom-Right Plus '+' Action Button (Exact Superkicks / Culture Circle Icon) -->
+                            <button onclick="event.stopPropagation(); ${isAuction ? `openProductModal(${item.id})` : `addToCart(${item.id})`}" 
+                                title="${isAuction ? 'Place Live Bid' : 'Quick Add to Cart'}"
+                                class="absolute bottom-3.5 right-3.5 z-10 w-9 h-9 rounded-xl bg-white border border-neutral-300 hover:bg-black hover:text-white hover:border-black flex items-center justify-center transition shadow-sm">
+                                <i class="fa-solid ${isAuction ? 'fa-gavel text-xs' : 'fa-plus text-sm'}"></i>
+                            </button>
+                        </div>
+
+                        <!-- Progress Indicator Bar (Superkicks Bottom Black Underline) -->
+                        <div class="w-full bg-neutral-200 h-[2px] mt-3 mb-3 overflow-hidden">
+                            <div class="bg-black h-full ${isAuction ? 'w-2/3' : 'w-1/3'}"></div>
+                        </div>
+
+                        <!-- Meta Details -->
+                        <div onclick="openProductModal(${item.id})" class="cursor-pointer space-y-0.5">
+                            <div class="flex items-center justify-between text-[11px] text-neutral-400 font-semibold uppercase">
+                                <span>${item.category || 'UNISEX'} • ${item.size}</span>
+                                <span>${item.condition.split(' ')[0]}</span>
+                            </div>
+                            <p class="text-xs font-bold text-neutral-600 uppercase tracking-wide">${item.brand}</p>
+                            <h3 class="text-sm font-extrabold text-black truncate group-hover:underline">${item.title}</h3>
+                        </div>
+                    </div>
+
+                    <!-- Pricing & Action Footer -->
+                    <div class="mt-2 pt-1">
+                        ${isAuction ? `
+                            <div class="flex items-baseline justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-neutral-400 block">Highest Bid (${item.bids.length} bids)</span>
+                                    <span data-price-id="${item.id}" class="text-base font-extrabold text-black">${formatINR(item.currentBid)}</span>
+                                </div>
+                                <button onclick="openProductModal(${item.id})" class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1.5 rounded-lg ${isExpired ? 'bg-neutral-200 text-neutral-700' : 'bg-black text-white hover:bg-emerald-500 hover:text-black'} transition">
+                                    ${isExpired ? 'View Winner' : 'Place Bid'}
+                                </button>
+                            </div>
+                        ` : `
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-base font-extrabold text-black">${formatINR(item.price)}</span>
+                                <span class="text-[11px] font-semibold text-emerald-700">${formatINR(monthlyEmi)}/month</span>
+                            </div>
+                            <div class="mt-1.5 flex items-center gap-1.5">
+                                <span class="bg-emerald-300/80 text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <i class="fa-solid fa-bolt text-[9px]"></i> NOW
+                                </span>
+                                <span class="text-[11px] text-neutral-500 font-medium">Get it today</span>
+                            </div>
+                        `}
+                    </div>
+                </article>
+                `;
+            }).join('');
+        }
+
+        // --- 4. REAL-TIME COUNTDOWN TIMER & AJAX POLLING ENGINE ---
+        setInterval(() => {
+            let stateChanged = false;
+
+            listings.forEach(item => {
+                if (item.listingType === 'auction' && item.secondsLeft > 0) {
+                    item.secondsLeft -= 1;
+                    if (item.secondsLeft <= 0) {
+                        item.secondsLeft = 0;
+                        item.status = 'closed';
+                        stateChanged = true;
+                        const topBidder = item.bids.length > 0 ? item.bids[0].bidder : "Reserve Not Met";
+                        showToast(`🔔 Auction Closed for ${item.title}! Winner: ${topBidder}`, 'emerald');
+                    }
+
+                    // Update card timer badge in DOM without full re-render
+                    const cardTimer = document.querySelector(`[data-timer-id="${item.id}"]`);
+                    if (cardTimer) {
+                        cardTimer.textContent = item.secondsLeft > 0 ? `⏳ ${formatSeconds(item.secondsLeft)}` : '⏳ CLOSED';
+                    }
+                }
+            });
+
+            // Update Hero Timer for New Balance 204V (id: 2)
+            const heroItem = listings.find(i => i.id === 2);
+            if (heroItem) {
+                document.getElementById('heroTimerDisplay').textContent = formatSeconds(heroItem.secondsLeft);
+                document.getElementById('heroHighestBid').textContent = formatINR(heroItem.currentBid);
+            }
+
+            // Update Open Product Modal if currently viewing an auction
+            if (selectedProductId !== null) {
+                const modalItem = listings.find(i => i.id === selectedProductId);
+                if (modalItem && modalItem.listingType === 'auction') {
+                    document.getElementById('modalCountdown').textContent = formatSeconds(modalItem.secondsLeft);
+                    if (modalItem.secondsLeft <= 0) {
+                        refreshModalView(modalItem);
+                    }
+                }
+            }
+
+            if (stateChanged) {
+                saveState();
+                renderProducts();
+            }
+        }, 1000);
+
+        // Periodic AJAX Polling Simulation (Every 12 seconds if enabled)
+        setInterval(() => {
+            if (!autoPollingEnabled) return;
+            // Subtle background sync indicator
+            const badge = document.getElementById('pollingBadge');
+            if (badge) {
+                badge.classList.add('ring-2', 'ring-emerald-400');
+                setTimeout(() => badge.classList.remove('ring-2', 'ring-emerald-400'), 600);
+            }
+        }, 6000);
+
+        function toggleAutoPolling() {
+            autoPollingEnabled = !autoPollingEnabled;
+            document.getElementById('pollingStatusText').textContent = autoPollingEnabled ? 'ON' : 'PAUSED';
+            showToast(`AJAX Live Bid Polling ${autoPollingEnabled ? 'Enabled (Every 5s)' : 'Paused'}`, 'black');
+        }
+
+        // --- 5. PRODUCT DETAIL & SERVER-VALIDATED BIDDING ENGINE ---
+        function openProductModal(id) {
+            const item = listings.find(i => i.id === id);
+            if (!item) return;
+            selectedProductId = id;
+
+            refreshModalView(item);
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function refreshModalView(item) {
+            document.getElementById('modalProductId').textContent = `LISTING #${item.id}04`;
+            document.getElementById('modalConditionBadge').textContent = `${item.size} • ${item.condition}`;
+            document.getElementById('modalShoeImage').src = item.image;
+            document.getElementById('modalSellerName').textContent = item.seller;
+            document.getElementById('modalBrand').textContent = item.brand;
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalDescription').textContent = item.description;
+
+            const badge = document.getElementById('modalListingBadge');
+            const auctionSec = document.getElementById('modalAuctionSection');
+            const fixedSec = document.getElementById('modalFixedSection');
+
+            if (item.listingType === 'auction') {
+                const isExpired = item.secondsLeft <= 0;
+                badge.textContent = isExpired ? 'AUCTION COMPLETED' : '⚡ LIVE AUCTION';
+                badge.className = `px-2.5 py-1 rounded text-[11px] font-bold uppercase ${isExpired ? 'bg-red-500 text-white' : 'bg-emerald-400 text-black'}`;
+
+                auctionSec.classList.remove('hidden');
+                fixedSec.classList.add('hidden');
+
+                document.getElementById('modalHighestBid').textContent = formatINR(item.currentBid);
+                document.getElementById('modalCountdown').textContent = formatSeconds(item.secondsLeft);
+                document.getElementById('modalStartPrice').textContent = formatINR(item.price);
+                document.getElementById('modalMinIncrement').textContent = `+${formatINR(item.minIncrement)}`;
+                document.getElementById('modalBidCount').textContent = item.bids.length;
+
+                const minNextBid = item.currentBid + item.minIncrement;
+                document.getElementById('modalMinRequiredBid').textContent = formatINR(minNextBid);
+                document.getElementById('bidAmountInput').value = minNextBid;
+
+                if (isExpired) {
+                    document.getElementById('activeBiddingControls').classList.add('hidden');
+                    document.getElementById('auctionClosedBanner').classList.remove('hidden');
+                    const winner = item.bids.length > 0 ? item.bids[0].bidder : activeUser;
+                    document.getElementById('modalWinnerName').textContent = winner;
+                    document.getElementById('modalWinningAmount').textContent = formatINR(item.currentBid);
+                } else {
+                    document.getElementById('activeBiddingControls').classList.remove('hidden');
+                    document.getElementById('auctionClosedBanner').classList.add('hidden');
+                }
+
+                // Render Bid History
+                const historyContainer = document.getElementById('modalBidHistoryList');
+                if (item.bids.length === 0) {
+                    historyContainer.innerHTML = `<p class="text-neutral-400 py-2 text-center">No bids placed yet. Be the first bidder!</p>`;
+                } else {
+                    historyContainer.innerHTML = item.bids.map((b, idx) => `
+                        <div class="flex items-center justify-between py-1.5 px-2 rounded ${idx === 0 ? 'bg-emerald-50 border border-emerald-200 font-bold text-emerald-950' : 'text-neutral-600'}">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full ${idx === 0 ? 'bg-emerald-500' : 'bg-neutral-300'}"></span>
+                                <span>${b.bidder}</span>
+                                ${idx === 0 ? '<span class="text-[10px] bg-emerald-500 text-white px-1.5 py-0.2 rounded">HIGHEST</span>' : ''}
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span>${formatINR(b.amount)}</span>
+                                <span class="text-[10px] text-neutral-400">${b.time}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                badge.textContent = '⚡ FIXED PRICE — INSTANT BUY';
+                badge.className = 'px-2.5 py-1 rounded text-[11px] font-bold uppercase bg-white text-black';
+                auctionSec.classList.add('hidden');
+                fixedSec.classList.remove('hidden');
+
+                document.getElementById('modalFixedPrice').textContent = formatINR(item.price);
+                document.getElementById('modalEmiText').textContent = `or ${formatINR(Math.round(item.price / 9))}/month EMI`;
+
+                document.getElementById('modalAddToCartBtn').onclick = () => {
+                    addToCart(item.id);
+                    closeProductModal();
+                };
+                document.getElementById('modalBuyNowBtn').onclick = () => {
+                    addToCart(item.id);
+                    closeProductModal();
+                    toggleCartDrawer(true);
+                };
+            }
+        }
+
+        function closeProductModal() {
+            selectedProductId = null;
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        function quickFillBid(multiplier) {
+            const item = listings.find(i => i.id === selectedProductId);
+            if (!item) return;
+            document.getElementById('bidAmountInput').value = item.currentBid + (item.minIncrement * multiplier);
+        }
+
+        // Server-Side Bid Validation Simulation (Core Synopsis Requirement)
+        function submitValidatedBid() {
+            const item = listings.find(i => i.id === selectedProductId);
+            if (!item) return;
+
+            // Validation 1: Check auction expiry
+            if (item.secondsLeft <= 0) {
+                showToast("❌ Bid Rejected: This auction has already expired.", "red");
+                return;
+            }
+
+            const enteredBid = parseInt(document.getElementById('bidAmountInput').value, 10);
+            const requiredMin = item.currentBid + item.minIncrement;
+
+            // Validation 2: Check minimum increment rule
+            if (isNaN(enteredBid) || enteredBid < requiredMin) {
+                showToast(`❌ Server Validation Error: Bid must be at least ${formatINR(requiredMin)} (Current Bid + ${formatINR(item.minIncrement)} min increment).`, "red");
+                return;
+            }
+
+            // Accept Bid
+            item.currentBid = enteredBid;
+            item.bids.unshift({
+                bidder: activeUser,
+                amount: enteredBid,
+                time: "Just now"
+            });
+
+            saveState();
+            refreshModalView(item);
+            renderProducts();
+            showToast(`✅ Bid Validated & Accepted! You are now the highest bidder at ${formatINR(enteredBid)}.`, "emerald");
+        }
+
+        // Simulate Rival Incoming Bid (AJAX Polling Demo for Viva)
+        function simulateCompetingBidInModal() {
+            if (!selectedProductId) return;
+            simulateIncomingBid(selectedProductId);
+        }
+
+        function simulateIncomingBid(targetId) {
+            const item = listings.find(i => i.id === targetId);
+            if (!item || item.listingType !== 'auction' || item.secondsLeft <= 0) return;
+
+            const rivalNames = ["Rohan Kapoor (Bidder #204)", "SneakerHead_Rohini", "Kabir_GGSIPU", "HypeBeast_DL"];
+            const randomRival = rivalNames[Math.floor(Math.random() * rivalNames.length)];
+            const newBid = item.currentBid + item.minIncrement;
+
+            item.currentBid = newBid;
+            item.bids.unshift({
+                bidder: randomRival,
+                amount: newBid,
+                time: "Live AJAX Sync"
+            });
+
+            saveState();
+            if (selectedProductId === targetId) {
+                refreshModalView(item);
+            }
+            renderProducts();
+            showToast(`⚡ [AJAX Live Update] ${randomRival} placed a higher bid of ${formatINR(newBid)} on ${item.title}!`, "black");
+        }
+
+        function triggerRandomLiveBid() {
+            const activeAuctions = listings.filter(i => i.listingType === 'auction' && i.secondsLeft > 0);
+            if (activeAuctions.length === 0) {
+                showToast("All auctions have ended!", "red");
+                return;
+            }
+            const randomAuction = activeAuctions[Math.floor(Math.random() * activeAuctions.length)];
+            simulateIncomingBid(randomAuction.id);
+        }
+
+        // Fast-Forward Timer to 0 to Demonstrate Automatic Auction Closing & Winner Selection
+        function fastForwardAuctionExpiry() {
+            const item = listings.find(i => i.id === selectedProductId);
+            if (!item) return;
+            item.secondsLeft = 0;
+            item.status = 'closed';
+            saveState();
+            refreshModalView(item);
+            renderProducts();
+            showToast(`🏁 Auction Timer Expired! Highest bidder selected as winner.`, "emerald");
+        }
+
+        function checkoutWonAuction() {
+            const item = listings.find(i => i.id === selectedProductId);
+            if (!item) return;
+
+            cart.push({
+                id: item.id,
+                title: item.title,
+                brand: item.brand,
+                size: item.size,
+                price: item.currentBid,
+                image: item.image,
+                type: "WON AUCTION GRAIL"
+            });
+            saveState();
+            updateCartUI();
+            closeProductModal();
+            toggleCartDrawer(true);
+            showToast(`🏆 Winning Auction Pair added to checkout!`, "emerald");
+        }
+
+        // --- 6. SELLER MODULE: CREATE NEW FOOTWEAR LISTING ---
+        function openSellModal() {
+            document.getElementById('sellModal').classList.remove('hidden');
+        }
+        function closeSellModal() {
+            document.getElementById('sellModal').classList.add('hidden');
+        }
+
+        function toggleSellType(type) {
+            sellModalListingType = type;
+            const btnAuction = document.getElementById('typeBtnAuction');
+            const btnFixed = document.getElementById('typeBtnFixed');
+            const priceLabel = document.getElementById('sellPriceLabel');
+            const incWrap = document.getElementById('sellIncrementWrap');
+            const durWrap = document.getElementById('sellDurationWrap');
+
+            if (type === 'auction') {
+                btnAuction.className = "py-3 px-4 rounded-xl border-2 border-black bg-black text-white font-bold flex items-center justify-center gap-2";
+                btnFixed.className = "py-3 px-4 rounded-xl border-2 border-neutral-200 bg-white text-neutral-700 font-bold flex items-center justify-center gap-2";
+                priceLabel.textContent = "Starting Bid (₹) *";
+                incWrap.classList.remove('hidden');
+                durWrap.classList.remove('hidden');
+            } else {
+                btnFixed.className = "py-3 px-4 rounded-xl border-2 border-black bg-black text-white font-bold flex items-center justify-center gap-2";
+                btnAuction.className = "py-3 px-4 rounded-xl border-2 border-neutral-200 bg-white text-neutral-700 font-bold flex items-center justify-center gap-2";
+                priceLabel.textContent = "Fixed Selling Price (₹) *";
+                incWrap.classList.add('hidden');
+                durWrap.classList.add('hidden');
+            }
+        }
+
+        function handleCreateListing(e) {
+            e.preventDefault();
+            const brand = document.getElementById('sellBrand').value.toUpperCase();
+            const title = document.getElementById('sellTitle').value.trim();
+            const size = document.getElementById('sellSize').value;
+            const condition = document.getElementById('sellCondition').value;
+            const price = parseInt(document.getElementById('sellPrice').value, 10);
+            const minIncrement = parseInt(document.getElementById('sellIncrement').value, 10) || 500;
+            const duration = parseInt(document.getElementById('sellDuration').value, 10) || 7200;
+            const image = document.getElementById('sellImagePreset').value;
+
+            const newItem = {
+                id: Date.now(),
+                brand,
+                title,
+                category: "UNISEX",
+                size,
+                condition,
+                listingType: sellModalListingType,
+                price,
+                currentBid: price,
+                minIncrement: sellModalListingType === 'auction' ? minIncrement : 0,
+                secondsLeft: sellModalListingType === 'auction' ? duration : 0,
+                status: 'active',
+                seller: activeUser.split(' ')[0] + "_Vault",
+                rating: "5.0",
+                reviewsCount: "New",
+                image,
+                description: `Seller-listed ${condition} ${brand} ${title} (${size}). Authenticated & ready for dispatch.`,
+                bids: []
+            };
+
+            listings.unshift(newItem);
+            saveState();
+            closeSellModal();
+            renderProducts();
+            renderDashboard();
+            showToast(`🚀 Listed "${brand} ${title}" as ${sellModalListingType.toUpperCase()}!`, "emerald");
+        }
+
+        // --- 7. CART & SIMULATED CHECKOUT MODULE ---
+        function addToCart(id) {
+            const item = listings.find(i => i.id === id);
+            if (!item) return;
+
+            cart.push({
+                id: item.id,
+                title: item.title,
+                brand: item.brand,
+                size: item.size,
+                price: item.price,
+                image: item.image,
+                type: "FIXED PRICE"
+            });
+            saveState();
+            updateCartUI();
+            showToast(`🛍️ Added ${item.title} to your bag!`, "black");
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveState();
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCountBadge').textContent = cart.length;
+            const container = document.getElementById('cartItemsContainer');
+            const totalEl = document.getElementById('cartTotalPrice');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-neutral-400">
+                        <i class="fa-solid fa-bag-shopping text-3xl mb-2"></i>
+                        <p class="text-xs font-semibold">Your bag is currently empty.</p>
+                    </div>
+                `;
+                totalEl.textContent = "₹0";
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map((c, idx) => {
+                total += c.price;
+                return `
+                    <div class="flex items-center gap-4 bg-neutral-50 p-3 rounded-2xl border border-neutral-200">
+                        <img src="${c.image}" alt="${c.title}" class="w-16 h-16 object-contain bg-white rounded-xl p-1 border">
+                        <div class="flex-1 min-w-0">
+                            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900">${c.type}</span>
+                            <h4 class="text-xs font-extrabold text-black truncate mt-1">${c.brand} ${c.title}</h4>
+                            <p class="text-[11px] text-neutral-500">${c.size} • ${formatINR(c.price)}</p>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-neutral-400 hover:text-red-500 p-2">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            totalEl.textContent = formatINR(total);
+        }
+
+        function toggleCartDrawer(open) {
+            const drawer = document.getElementById('cartDrawerBackdrop');
+            if (open) {
+                updateCartUI();
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
+        function processSimulatedCheckout() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty!", "red");
+                return;
+            }
+            const payMethod = document.getElementById('checkoutPaymentMethod').value;
+
+            cart.forEach(item => {
+                orders.unshift({
+                    orderId: "ORD-" + Math.floor(10000 + Math.random() * 90000),
+                    title: `${item.brand} ${item.title} (${item.size})`,
+                    type: item.type,
+                    amount: item.price,
+                    buyer: activeUser,
+                    paymentMethod: payMethod,
+                    date: "03 Nov 2026",
+                    status: "Order Confirmed & Paid"
+                });
+            });
+
+            cart = [];
+            saveState();
+            updateCartUI();
+            toggleCartDrawer(false);
+            switchView('dashboard');
+            showToast("🎉 Payment Simulated Successfully! Order added to your Order History.", "emerald");
+        }
+
+        // --- 8. USER & SELLER DASHBOARD RENDERER ---
+        function renderDashboard() {
+            document.getElementById('dashboardUserName').textContent = activeUser;
+
+            // Collect all bids across listings
+            let allBids = [];
+            let wonCount = 0;
+            listings.forEach(item => {
+                if (item.listingType === 'auction' && item.bids.length > 0) {
+                    if (item.bids[0].bidder === activeUser) wonCount++;
+                    item.bids.forEach(b => {
+                        allBids.push({
+                            shoeId: item.id,
+                            title: `${item.brand} ${item.title}`,
+                            bidder: b.bidder,
+                            amount: b.amount,
+                            isHighest: item.bids[0].amount === b.amount,
+                            status: item.secondsLeft <= 0 ? 'Closed' : 'Live'
+                        });
+                    });
+                }
+            });
+
+            document.getElementById('statTotalBids').textContent = allBids.length;
+            document.getElementById('statWonAuctions').textContent = wonCount;
+            document.getElementById('statTotalOrders').textContent = orders.length;
+            document.getElementById('statMyListings').textContent = listings.length;
+
+            // Render Bids List
+            const bidsContainer = document.getElementById('dashboardBidsList');
+            bidsContainer.innerHTML = allBids.slice(0, 6).map(b => `
+                <div onclick="openProductModal(${b.shoeId})" class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-neutral-100 hover:bg-neutral-50 text-xs">
+                    <div>
+                        <p class="font-bold text-black">${b.title}</p>
+                        <p class="text-[11px] text-neutral-500">Bidder: ${b.bidder}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-extrabold text-black">${formatINR(b.amount)}</p>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${b.isHighest ? 'bg-emerald-100 text-emerald-800' : 'bg-neutral-200 text-neutral-600'}">
+                            ${b.isHighest ? 'LEADING BID' : 'OUTBID'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Orders List
+            const ordersContainer = document.getElementById('dashboardOrdersList');
+            ordersContainer.innerHTML = orders.map(o => `
+                <div class="flex items-center justify-between p-3 rounded-xl border border-neutral-200 bg-neutral-50 text-xs">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono text-[10px] font-bold bg-black text-white px-2 py-0.5 rounded">${o.orderId}</span>
+                            <span class="text-[10px] font-bold text-emerald-700">${o.type}</span>
+                        </div>
+                        <p class="font-bold text-black mt-1">${o.title}</p>
+                        <p class="text-[11px] text-neutral-500">${o.paymentMethod} • ${o.date}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-extrabold text-sm text-black">${formatINR(o.amount)}</p>
+                        <span class="text-[10px] font-bold text-emerald-700">✔ ${o.status}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Seller Table
+            const tbody = document.getElementById('sellerListingsTableBody');
+            tbody.innerHTML = listings.map(item => `
+                <tr class="hover:bg-neutral-50">
+                    <td class="py-3 px-2 font-mono text-neutral-400">#${item.id}</td>
+                    <td class="py-3 px-2 font-bold">${item.brand} ${item.title} (${item.size})</td>
+                    <td class="py-3 px-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.listingType === 'auction' ? 'bg-emerald-100 text-emerald-900' : 'bg-neutral-200 text-neutral-800'}">
+                            ${item.listingType}
+                        </span>
+                    </td>
+                    <td class="py-3 px-2 font-extrabold">${formatINR(item.currentBid)}</td>
+                    <td class="py-3 px-2">
+                        <span class="text-emerald-700 font-semibold">${item.listingType === 'auction' && item.secondsLeft <= 0 ? 'Ended' : 'Active'}</span>
+                    </td>
+                    <td class="py-3 px-2 text-right space-x-2">
+                        <button onclick="openProductModal(${item.id})" class="text-black underline font-semibold">Inspect</button>
+                        <button onclick="deleteListing(${item.id})" class="text-red-600 hover:underline font-semibold">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteListing(id) {
+            listings = listings.filter(i => i.id !== id);
+            saveState();
+            renderDashboard();
+            renderProducts();
+            showToast("Listing deleted from database.", "black");
+        }
+
+        // --- 9. NAVIGATION, FILTERS & UI HELPERS ---
+        function switchView(view) {
+            const mp = document.getElementById('marketplaceView');
+            const db = document.getElementById('dashboardView');
+            if (view === 'dashboard') {
+                mp.classList.add('hidden');
+                db.classList.remove('hidden');
+                renderDashboard();
+            } else {
+                db.classList.add('hidden');
+                mp.classList.remove('hidden');
+                renderProducts();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setMainTab(tab) {
+            switchView('marketplace');
+            currentMainTab = tab;
+            const labels = {
+                all: 'All Footwear Listings',
+                auction: 'Live Sneaker Auctions',
+                fixed: 'Fixed Price (Instant Buy)',
+                new: 'New Arrivals',
+                under10k: 'Footwear Under ₹10,000',
+                wishlist: 'Saved Wishlist'
+            };
+            document.getElementById('currentCategoryBreadcrumb').textContent = labels[tab] || 'All Listings';
+            renderProducts();
+        }
+
+        function setBrandFilter(brand) {
+            switchView('marketplace');
+            currentBrandFilter = brand;
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.className = "filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 transition";
+            });
+            const activePill = document.getElementById(`pill-${brand}`);
+            if (activePill) {
+                activePill.className = "filter-pill shrink-0 px-4 py-2 rounded-full text-xs font-bold bg-black text-white border border-black transition";
+            }
+            renderProducts();
+        }
+
+        function handleSearch(val) {
+            currentSearchQuery = val;
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (val.trim() !== '') {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderProducts();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch('');
+        }
+
+        function resetAllFilters() {
+            currentMainTab = 'all';
+            currentBrandFilter = 'ALL';
+            clearSearch();
+            setBrandFilter('ALL');
+        }
+
+        function toggleWishlist(id) {
+            if (wishlist.includes(id)) {
+                wishlist = wishlist.filter(item => item !== id);
+                showToast("Removed from Wishlist", "black");
+            } else {
+                wishlist.push(id);
+                showToast("❤ Saved to Wishlist", "black");
+            }
+            saveState();
+            updateWishlistBadge();
+            renderProducts();
+        }
+
+        function filterByWishlist() {
+            setMainTab('wishlist');
+        }
+
+        function updateWishlistBadge() {
+            const b = document.getElementById('wishlistCountBadge');
+            if (wishlist.length > 0) {
+                b.textContent = wishlist.length;
+                b.classList.remove('hidden');
+            } else {
+                b.classList.add('hidden');
+            }
+        }
+
+        function switchActiveUser(val) {
+            activeUser = val;
+            renderDashboard();
+            showToast(`Switched active session to ${val}`, "black");
+        }
+
+        // Hero Carousel Controls
+        function nextHeroSlide() {
+            document.getElementById(`heroSlide${currentHeroSlide}`).classList.add('hidden');
+            currentHeroSlide = (currentHeroSlide + 1) % 2;
+            document.getElementById(`heroSlide${currentHeroSlide}`).classList.remove('hidden');
+        }
+        function prevHeroSlide() {
+            nextHeroSlide();
+        }
+
+        // Backend Code Modal
+        function openBackendModal() {
+            document.getElementById('backendModal').classList.remove('hidden');
+        }
+        function closeBackendModal() {
+            document.getElementById('backendModal').classList.add('hidden');
+        }
+
+        // Toast Notification System (No alert() used anywhere)
+        function showToast(message, theme = 'black') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgClass = theme === 'emerald' ? 'bg-emerald-950 text-emerald-200 border-emerald-500' 
+                          : theme === 'red' ? 'bg-red-950 text-red-200 border-red-500' 
+                          : 'bg-neutral-950 text-white border-neutral-700';
+
+            toast.className = `pointer-events-auto border px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center justify-between gap-3 transition-all duration-300 ${bgClass}`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="text-white/60 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 4200);
+        }
+
+        // Initialize on Window Load
+        window.onload = function() {
+            updateCartUI();
+            updateWishlistBadge();
+            renderProducts();
+        };
+    </script>
+</body>
+</html>
